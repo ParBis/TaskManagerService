@@ -17,6 +17,8 @@ public class AllTask {
 	int priority;
 	
 	String parentTask;
+	
+	int taskStatus; // 0 - Inactive, 1 - Active
 
 
 	
@@ -80,9 +82,20 @@ public class AllTask {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	
 
+	/**
+	 * @return the taskStatus
+	 */
+	public int getTaskStatus() {
+		return taskStatus;
+	}
 
+	/**
+	 * @param taskStatus the taskStatus to set
+	 */
+	public void setTaskStatus(int taskStatus) {
+		this.taskStatus = taskStatus;
+	}
 
 	public String getParentTask() {
 		return parentTask;
@@ -95,10 +108,11 @@ public class AllTask {
 	@Override
 	public String toString() {
 		return "Task [taskId=" + taskId + ", parentId=" + parentId + ", task=" + task + ", stStartDate=" + stStartDate
-				+ ", stEndDate=" + stEndDate + ", priority=" + priority + ", parentTask=" + parentTask + "]";
+				+ ", stEndDate=" + stEndDate + ", priority=" + priority + ", parentTask=" + parentTask + ", taskStatus=" + taskStatus +"]";
 	}
 
-	public AllTask(int parentId, String task, String stStartDate, String stEndDate, int priority, String parentTask) {
+	public AllTask(int parentId, String task, String stStartDate, String stEndDate, int priority, String parentTask,
+			int taskStatus) {
 		super();
 		this.parentId = parentId;
 		this.task = task;
@@ -106,6 +120,7 @@ public class AllTask {
 		this.stEndDate = stEndDate;
 		this.priority = priority;
 		this.parentTask = parentTask;
+		this.taskStatus = taskStatus;
 	}
 
 	

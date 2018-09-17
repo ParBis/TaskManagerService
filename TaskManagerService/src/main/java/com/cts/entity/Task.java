@@ -6,8 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
@@ -32,7 +30,7 @@ public class Task {
 	@Override
 	public String toString() {
 		return "Task [taskId=" + taskId + /*", parentId=" + parentId +*/ ", task=" + task + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", priority=" + priority + "]";
+				+ ", endDate=" + endDate + ", priority=" + priority + ", taskStatus=" + taskStatus +"]";
 	}
 
 
@@ -45,6 +43,7 @@ public class Task {
 	Date startDate;
 	Date endDate;
 	int priority;
+	int taskStatus; // 0 - Inactive, 1 - Active
 
 	@ManyToOne
 	@JsonIgnore
@@ -110,6 +109,20 @@ public class Task {
 
 	public void setParentTask(ParentTask parentTask) {
 		this.parentTask = parentTask;
+	}
+
+	/**
+	 * @return the taskStatus
+	 */
+	public int getTaskStatus() {
+		return taskStatus;
+	}
+
+	/**
+	 * @param taskStatus the taskStatus to set
+	 */
+	public void setTaskStatus(int taskStatus) {
+		this.taskStatus = taskStatus;
 	}
 	
 

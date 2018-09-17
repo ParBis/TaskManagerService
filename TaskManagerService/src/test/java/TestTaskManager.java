@@ -9,13 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.NoResultException;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -34,8 +30,8 @@ public class TestTaskManager {
 	//@Test
 	public void testInsertingTask() {
 		ParentTask pt = new ParentTask("1");
-		Task task = new Task("Task", getSqlDate("12-12-2012"), getSqlDate("12-12-2016"), 1);
-		
+		Task task = new Task("Partha", getSqlDate("12-12-2012"), getSqlDate("12-12-2016"), 1);
+		task.setTaskStatus(1);
 		task.setParentTask(pt);
 		Set<Task> tasks = new HashSet<>();
 		tasks.add(task); 
@@ -45,7 +41,7 @@ public class TestTaskManager {
 		repo.addParentTask(pt);
 	}
 
-	//@Test
+	@Test
 	public void testFindingTask() {
 		List<Task> tasks = repo.findTasks();
 		System.out.println("tasks-->" + tasks);
@@ -62,6 +58,7 @@ public class TestTaskManager {
 			allTask.setPriority(task.getPriority());
 			allTask.setParentId(task.getParentTask().getParentId());
 			allTask.setParentTask(task.getParentTask().getParentTask());
+			allTask.setTaskStatus(task.getTaskStatus());
 			allTasks.add(allTask);
 		}
 		System.out.println("allTasks-->" + allTasks);
@@ -74,13 +71,13 @@ public class TestTaskManager {
 	}
 
 
-	@Test
+	//@Test
 	public void testUpdateTask() {
 		AllTask allTask = new AllTask();
-		allTask.setTaskId(2);
+		allTask.setTaskId(20);
 		allTask.setTask("TaskNew");
-		allTask.setStStartDate("12-12-2013");
-		allTask.setStEndDate("12-12-2017");
+		allTask.setStStartDate("2009-09-10");
+		allTask.setStEndDate("2015-09-10");
 		allTask.setPriority(2);
 		allTask.setParentId(1);
 		allTask.setParentTask("ParentTask");
@@ -102,16 +99,38 @@ public class TestTaskManager {
 
 	public Date getSqlDate(String stDate) {
 		//String startDate="12-31-2014";
+		System.out.println("---------------------------------------" + stDate);
 		java.sql.Date sqlStartDate = null;
-		SimpleDateFormat sdf1 = new SimpleDateFormat("MM-dd-yyyy");
+		SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy");
 		java.util.Date date;
+		boolean isNotParse = false;
 		try {
 			if(null != stDate) {
 				date = sdf1.parse(stDate);
 				sqlStartDate = new java.sql.Date(date.getTime());
 			}
 		} catch (ParseException e) {
+			isNotParse = true;
 			e.printStackTrace();
+		}
+		if(isNotParse){
+			try{
+				SimpleDateFormat sdf11 = new SimpleDateFormat("yyyy-MM-dd");
+				java.util.Date date11 = sdf11.parse(stDate);
+	
+				SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
+				String date1 = sdf2.format(date11);
+				
+	
+				java.util.Date date2 = sdf2.parse(date1);
+				
+				sqlStartDate = new java.sql.Date(date2.getTime());
+				System.out.println("Parse diff format--> " + sqlStartDate);
+				}
+			catch(ParseException e) {
+				isNotParse = true;
+				e.printStackTrace();
+			}
 		}
 		return sqlStartDate;
 	}
@@ -119,51 +138,14 @@ public class TestTaskManager {
 
 	public String getStringdate(Date sqlDate) {
 		String stDate = "";
-		
-		DateFormat df = new SimpleDateFormat("MM-dd-yyyy");  
-		stDate = df.format(sqlDate); 
+
+		if(null != sqlDate) {
+			//DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
+			stDate = df.format(sqlDate); 
+		} 
 		
 		return stDate;
 	}
 	
-	/*@Autowired
-	EmployeeRepository repo;
-	
-	@Test
-	public void testInsertingEmployee() {
-		Employee emp = new Employee("Arun");
-		emp.setSalary(20000d);
-		repo.addEmployee(emp);
-	
-	}
-//	@Test
-	public void testFindingEmployee() {
-		repo.findEmployee(2);
-	}
-//	@Test
-	public void testRemovingEmployee() {
-		repo.removeEmployee(2);
-	}
-	
-//	@Test
-	public void testUpdatingEmployeeSalary() {
-		//repo.updateEmployee(1, 30000d);
-	}
-//	@Test
-	public void testFindingEmployeeByName() {
-		Employee emp = repo.findByName("Arun");
-		assertEquals("should return one emp with name", emp.getName(), "Arun");
-	}
-//	@Test
-	public void testFindingEmployeesBySalary() {
-		List<Employee> employees = repo.findBySalary(25000d);
-		assertEquals("should return one emp with name", employees.size(), 1);
-	}
-	@Test
-	public void testFindingEmployees() {
-		List<Employee> employees = repo.findEmployees();
-//		assertEquals("should return one emp with name", employees.size(), 1);
-	}
-	
-*/
 }

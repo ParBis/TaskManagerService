@@ -9,7 +9,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.cts.entity.ParentTask;
 import com.cts.entity.Task;
@@ -76,7 +75,7 @@ public class TaskRepository {
 		tasks = queryResult.list();
 		/*System.out.println(tasks);
 		for (int i = 0; i < tasks.size(); i++) {
-		   Task task = (Book) tasks.get(i);
+		   Task task = (Task) tasks.get(i);
 			System.out.println("Task-->" + task);
 		}*/
 		
@@ -152,71 +151,26 @@ public class TaskRepository {
 	}
 	
 
-	/*public ParentTask findPTById(int id) {
-		TypedQuery<ParentTask> query = em.createNamedQuery("findPTById", ParentTask.class);
-		query.setParameter("parentId", id);
-		ParentTask parentTask = query.getSingleResult();
-		System.out.println(parentTask);
-		return parentTask;
+	/**
+	 * 
+	 * @param taskId
+	 */
+	public void updateTaskStatus(int taskId) {
+
+		System.out.println("updateTaskStatus Task Id-->" + taskId);
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+
+		Task task = session.get(Task.class, taskId);
+		System.out.println("Old Task-->" + task);
+
+		task.setTaskStatus(0); // 0 - Inactive, 1 - Active
+		
+		System.out.println("Updated Task Status-->" + task);
+
+		tx.commit();
+		session.close();
 	}
-
-	
-	
-	public  List<ParentTask> findParentTasks() {
-		TypedQuery<ParentTask> query = em.createNamedQuery("findParentTasks", ParentTask.class);
-		List<ParentTask> pTasks = query.getResultList();
-		System.out.println(pTasks);
-		return pTasks;
-	}
-
-
-	@Transactional
-	public void addTask(Task task) {
-		em.persist(task);
-	}
-
-	@Transactional
-	public void addParentTask(ParentTask pt) {
-		em.persist(pt);
-	}
-	
-
-
-	@Transactional
-	public void updateTask(Task task) {
-		Task taskObj = em.find(Task.class, task.getTaskId());
-		taskObj.setParentId(task.getParentId());
-		taskObj.setTask(task.getTask());
-		taskObj.setStartDate(task.getStartDate());
-		taskObj.setEndDate(task.getEndDate());
-		taskObj.setPriority(task.getPriority());
-		System.out.println(taskObj);
-	}
-
-	@Transactional
-	public void updateParentTask(ParentTask pt) {
-		ParentTask pTaskObj = em.find(ParentTask.class, pt.getParentId());
-		pTaskObj.setParentTask(pt.getParentTask());
-		System.out.println(pTaskObj);
-	}
-
-	
-	
-
-
-	@Transactional
-	public void removeTask(int id) {
-		Task emp = em.find(Task.class, id);
-		em.remove(emp);
-	}
-
-	@Transactional
-	public void removeParentTast(int id) {
-		ParentTask emp = em.find(ParentTask.class, id);
-		em.remove(emp);
-	}
-*/
-
 
 
 }
