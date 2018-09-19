@@ -266,10 +266,6 @@ public class TaskRestController {
 	 * @param allTask
 	 * @return
 	 */
-	/*@RequestMapping(value = "/task/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteEmployee(@PathVariable("id") int id){
-		System.out.println("ID recieved : " + id);
-	}*/
 	@RequestMapping(value = "/taskStatus/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> updateTaskStatus(@PathVariable("id") int id) {
 		System.out.println("Update Task Status to Inactive, Id " + id);
